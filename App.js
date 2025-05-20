@@ -10,27 +10,23 @@ import {
   TextInput,
   Button,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather'; // Ícones Feather
 
 import useShoppingList from './useShoppingList';
 
 function App() {
   const { items, addItem, removeItem, togglePurchased, clearList, stats } = useShoppingList();
   const [newItemName, setNewItemName] = useState('');
-
-  // Hook para alternar tema
   const [theme, setTheme] = useState('light');
-
   const isDark = theme === 'dark';
 
   const handleAddItem = () => {
-    addItem(newItemName);
-    setNewItemName('');
-  };
-
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    if (newItemName.trim() !== '') {
+      addItem(newItemName);
+      setNewItemName('');
+    }
   };
 
   const renderItem = ({ item }) => (
@@ -40,7 +36,11 @@ function App() {
         style={styles.itemTextWrapper}
       >
         <Text
-          style={[styles.itemName, item.purchased && styles.purchasedItem, isDark && styles.itemNameDark]}
+          style={[
+            styles.itemName,
+            item.purchased && styles.purchasedItem,
+            isDark && styles.itemNameDark,
+          ]}
         >
           {item.name}
         </Text>
@@ -51,9 +51,18 @@ function App() {
 
   return (
     <View style={[styles.container, isDark && styles.containerDark]}>
-      <Text style={[styles.header, isDark && styles.headerDark]}>Minha Lista de Compras</Text>
+      {/* Ícone de tema no canto superior direito */}
+      <View style={styles.themeSwitcher}>
+        <TouchableOpacity onPress={() => setTheme(isDark ? 'light' : 'dark')}>
+          <Icon
+            name={isDark ? 'sun' : 'moon'}
+            size={28}
+            color={isDark ? '#FFD700' : '#333'}
+          />
+        </TouchableOpacity>
+      </View>
 
-      <Button title={`Tema: ${theme === 'light' ? 'Claro' : 'Escuro'}`} onPress={toggleTheme} />
+      <Text style={[styles.header, isDark && styles.headerDark]}>Minha Lista de Compras</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -68,7 +77,9 @@ function App() {
       </View>
 
       {items.length === 0 ? (
-        <Text style={[styles.emptyListText, isDark && styles.emptyListTextDark]}>Sua lista está vazia!</Text>
+        <Text style={[styles.emptyListText, isDark && styles.emptyListTextDark]}>
+          Sua lista está vazia!
+        </Text>
       ) : (
         <FlatList
           data={items}
@@ -98,39 +109,46 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 20,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#fff',
   },
   containerDark: {
     backgroundColor: '#121212',
   },
+  themeSwitcher: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 1,
+  },
   header: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#000',
     textAlign: 'center',
-    color: '#333',
   },
   headerDark: {
     color: '#fff',
   },
   inputContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
+    gap: 10,
   },
   input: {
     flex: 1,
-    borderWidth: 1,
     borderColor: '#ccc',
+    borderWidth: 1,
     padding: 10,
-    marginRight: 10,
     borderRadius: 5,
     backgroundColor: '#fff',
     color: '#000',
   },
   inputDark: {
-    backgroundColor: '#333',
+    backgroundColor: '#1e1e1e',
+    borderColor: '#444',
     color: '#fff',
-    borderColor: '#555',
   },
   list: {
     flex: 1,
@@ -138,30 +156,21 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    backgroundColor: '#fff',
-    marginBottom: 5,
+    padding: 12,
+    marginBottom: 10,
     borderRadius: 5,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
+    backgroundColor: '#f0f0f0',
   },
   itemContainerDark: {
-    backgroundColor: '#1e1e1e',
-    borderBottomColor: '#333',
+    backgroundColor: '#2c2c2c',
   },
   itemTextWrapper: {
     flex: 1,
+    marginRight: 10,
   },
   itemName: {
-    fontSize: 18,
-    color: '#333',
+    fontSize: 16,
+    color: '#000',
   },
   itemNameDark: {
     color: '#fff',
@@ -171,28 +180,25 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   emptyListText: {
-    fontSize: 18,
     textAlign: 'center',
-    marginTop: 50,
-    color: '#666',
+    marginTop: 20,
+    color: '#555',
   },
   emptyListTextDark: {
     color: '#aaa',
   },
   footer: {
-    marginTop: 20,
-    paddingTop: 15,
+    paddingVertical: 15,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
-    alignItems: 'center',
+    borderColor: '#ccc',
   },
   statsText: {
-    fontSize: 16,
+    textAlign: 'center',
     marginBottom: 10,
-    color: '#555',
+    color: '#000',
   },
   statsTextDark: {
-    color: '#ccc',
+    color: '#fff',
   },
 });
 
