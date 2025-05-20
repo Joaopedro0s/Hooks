@@ -1,72 +1,71 @@
-import React, { useState } from 'react'; // Importe useState para gerenciar o input
+// App.js
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
-  TextInput, // Adicionado para o input
-  Button,    // Adicionado para os botões
-  FlatList,  // Adicionado para renderizar a lista
-  TouchableOpacity // Adicionado para interagir com o texto do item
+  TextInput,
+  Button,
+  FlatList,
+  TouchableOpacity
 } from 'react-native';
 
-// Importe o seu Hook personalizado
 import useShoppingList from './useShoppingList';
 
-// Converte o componente App de CLASSE para FUNÇÃO
 function App() {
-  // Usa o Hook personalizado para gerenciar a lista de compras
   const { items, addItem, removeItem, togglePurchased, clearList, stats } = useShoppingList();
-
-  // Estado local para o valor do input de adicionar novo item
   const [newItemName, setNewItemName] = useState('');
 
-  // Função para lidar com a adição de um item
+  // Hook para alternar tema
+  const [theme, setTheme] = useState('light');
+
+  const isDark = theme === 'dark';
+
   const handleAddItem = () => {
-    addItem(newItemName); // Chama a função do hook para adicionar
-    setNewItemName(''); // Limpa o campo de texto
+    addItem(newItemName);
+    setNewItemName('');
   };
 
-  // Função para renderizar cada item da lista
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      {/* TouchableOpacity para marcar/desmarcar item como comprado */}
+    <View style={[styles.itemContainer, isDark && styles.itemContainerDark]}>
       <TouchableOpacity
         onPress={() => togglePurchased(item.id)}
         style={styles.itemTextWrapper}
       >
         <Text
-          style={[
-            styles.itemName,
-            item.purchased && styles.purchasedItem, // Aplica estilo se o item foi comprado
-          ]}
+          style={[styles.itemName, item.purchased && styles.purchasedItem, isDark && styles.itemNameDark]}
         >
           {item.name}
         </Text>
       </TouchableOpacity>
-      {/* Botão para remover o item */}
       <Button title="Remover" onPress={() => removeItem(item.id)} color="red" />
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Minha Lista de Compras</Text>
+    <View style={[styles.container, isDark && styles.containerDark]}>
+      <Text style={[styles.header, isDark && styles.headerDark]}>Minha Lista de Compras</Text>
 
-      {/* Área para adicionar novos itens */}
+      <Button title={`Tema: ${theme === 'light' ? 'Claro' : 'Escuro'}`} onPress={toggleTheme} />
+
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, isDark && styles.inputDark]}
           placeholder="Adicionar novo item..."
+          placeholderTextColor={isDark ? '#aaa' : '#888'}
           value={newItemName}
           onChangeText={setNewItemName}
-          onSubmitEditing={handleAddItem} // Adiciona ao pressionar 'Enter' no teclado
+          onSubmitEditing={handleAddItem}
         />
         <Button title="Adicionar" onPress={handleAddItem} />
       </View>
 
-      {/* Exibe a lista de itens ou uma mensagem de lista vazia */}
       {items.length === 0 ? (
-        <Text style={styles.emptyListText}>Sua lista está vazia!</Text>
+        <Text style={[styles.emptyListText, isDark && styles.emptyListTextDark]}>Sua lista está vazia!</Text>
       ) : (
         <FlatList
           data={items}
@@ -76,16 +75,15 @@ function App() {
         />
       )}
 
-      {/* Rodapé com estatísticas e botão para limpar a lista */}
       <View style={styles.footer}>
-        <Text style={styles.statsText}>
+        <Text style={[styles.statsText, isDark && styles.statsTextDark]}>
           Itens Comprados: {stats.purchased} / {stats.total}
         </Text>
         <Button
           title="Limpar Tudo"
           onPress={clearList}
           color="orange"
-          disabled={items.length === 0} // Desabilita se a lista estiver vazia
+          disabled={items.length === 0}
         />
       </View>
     </View>
@@ -95,9 +93,12 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50, // Espaço superior para o status bar
+    paddingTop: 50,
     paddingHorizontal: 20,
-    backgroundColor: '#f8f8f8', // Fundo leve
+    backgroundColor: '#f8f8f8',
+  },
+  containerDark: {
+    backgroundColor: '#121212',
   },
   header: {
     fontSize: 28,
@@ -106,21 +107,30 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333',
   },
+  headerDark: {
+    color: '#fff',
+  },
   inputContainer: {
     flexDirection: 'row',
     marginBottom: 20,
   },
   input: {
-    flex: 1, // Ocupa o máximo de espaço possível
+    flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
     marginRight: 10,
     borderRadius: 5,
     backgroundColor: '#fff',
+    color: '#000',
+  },
+  inputDark: {
+    backgroundColor: '#333',
+    color: '#fff',
+    borderColor: '#555',
   },
   list: {
-    flex: 1, // Garante que a lista ocupe o espaço restante
+    flex: 1,
   },
   itemContainer: {
     flexDirection: 'row',
@@ -133,28 +143,38 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 5,
     borderRadius: 5,
-    elevation: 1, // Sombra para Android
-    shadowColor: '#000', // Sombra para iOS
+    elevation: 1,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 1,
   },
+  itemContainerDark: {
+    backgroundColor: '#1e1e1e',
+    borderBottomColor: '#333',
+  },
   itemTextWrapper: {
-    flex: 1, // Faz com que o texto ocupe o espaço para o clique
+    flex: 1,
   },
   itemName: {
     fontSize: 18,
     color: '#333',
   },
+  itemNameDark: {
+    color: '#fff',
+  },
   purchasedItem: {
-    textDecorationLine: 'line-through', // Adiciona um risco ao texto
-    color: 'gray', // Cor mais suave para itens comprados
+    textDecorationLine: 'line-through',
+    color: 'gray',
   },
   emptyListText: {
     fontSize: 18,
     textAlign: 'center',
     marginTop: 50,
     color: '#666',
+  },
+  emptyListTextDark: {
+    color: '#aaa',
   },
   footer: {
     marginTop: 20,
@@ -167,6 +187,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     color: '#555',
+  },
+  statsTextDark: {
+    color: '#ccc',
   },
 });
 
