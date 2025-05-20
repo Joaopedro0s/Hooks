@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // App.js
+=======
+>>>>>>> fa59a9bb (Versão)
 import React, { useState } from 'react';
 import {
   StyleSheet,
