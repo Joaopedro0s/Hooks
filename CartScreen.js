@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 
 const CartScreen = () => {
-  const cartItems = [
+  const [cartItems, setCartItems] = useState([
     { id: 1, title: 'Red Dead Redemption 2', price: 'R$ 99,99', image: 'https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg' },
     { id: 2, title: 'Cyberpunk 2077', price: 'R$ 89,99', image: 'https://upload.wikimedia.org/wikipedia/en/9/9f/Cyberpunk_2077_box_art.jpg' },
-  ];
+  ]);
 
-  const total = cartItems.reduce((sum, item) => sum + parseFloat(item.price.replace('R$ ', '').replace(',', '.')), 0);
+  // Função para remover item do carrinho
+  const removeItem = (id) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+  };
+
+  const total = cartItems.reduce(
+    (sum, item) => sum + parseFloat(item.price.replace('R$ ', '').replace(',', '.')),
+    0
+  );
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <Text style={styles.sectionTitle}>Seu Carrinho</Text>
-        
+
         {cartItems.map(item => (
           <View key={item.id} style={styles.cartItem}>
             <Image source={{ uri: item.image }} style={styles.cartItemImage} />
@@ -21,7 +29,10 @@ const CartScreen = () => {
               <Text style={styles.cartItemTitle}>{item.title}</Text>
               <Text style={styles.cartItemPrice}>{item.price}</Text>
             </View>
-            <TouchableOpacity style={styles.removeButton}>
+            <TouchableOpacity
+              style={styles.removeButton}
+              onPress={() => removeItem(item.id)} // Remove item ao clicar
+            >
               <Text style={styles.removeButtonText}>X</Text>
             </TouchableOpacity>
           </View>

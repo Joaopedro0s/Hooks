@@ -1,8 +1,9 @@
-import React from 'react';
-import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
-  
+  const [search, setSearch] = useState('');
+
   const featuredGames = [
     { id: 1, title: 'Overwatch 2', price: 'Grátis', discount: '', image: 'https://www.freetogame.com/g/540/thumbnail.jpg' },
     { id: 2, title: 'Dota 2', price: 'Grátis', discount: '', image: 'https://i.ytimg.com/vi/Me3NIidc5pE/maxresdefault.jpg' },
@@ -16,16 +17,34 @@ const HomeScreen = ({ navigation }) => {
     { id: 6, title: 'Cyberpunk 2077', price: 'R$ 89,99', discount: '-50%', originalPrice: 'R$ 179,99', image: 'https://upload.wikimedia.org/wikipedia/en/9/9f/Cyberpunk_2077_box_art.jpg' },
   ];
 
+  const handleSearch = (text) => {
+    setSearch(text);
+  };
+
+  const filteredFeaturedGames = featuredGames.filter(game =>
+    game.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredSpecialOffers = specialOffers.filter(game =>
+    game.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.searchBar}>
-          <Text style={styles.searchText}>Pesquisar</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Pesquisar jogos..."
+            placeholderTextColor="#8f98a0"
+            value={search}
+            onChangeText={handleSearch}
+          />
         </View>
 
         <Text style={styles.sectionTitle}>Gratuito Para Jogar</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
-          {featuredGames.map(game => (
+          {filteredFeaturedGames.map(game => (
             <TouchableOpacity key={game.id} style={styles.gameCard}>
               <Image source={{ uri: game.image }} style={styles.gameImage} />
               <Text style={styles.gameTitle}>{game.title}</Text>
@@ -44,7 +63,7 @@ const HomeScreen = ({ navigation }) => {
 
         <Text style={styles.sectionTitle}>Ofertas especiais</Text>
         <View style={styles.specialOffersContainer}>
-          {specialOffers.map(game => (
+          {filteredSpecialOffers.map(game => (
             <TouchableOpacity key={game.id} style={styles.specialOfferCard}>
               <Image source={{ uri: game.image }} style={styles.specialOfferImage} />
               <View style={styles.specialOfferDetails}>
@@ -81,8 +100,9 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 3,
   },
-  searchText: {
-    color: '#8f98a0',
+  searchInput: {
+    color: '#ebebeb',
+    fontSize: 16,
   },
   sectionTitle: {
     color: '#ebebeb',
