@@ -4,15 +4,16 @@ import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'rea
 const HomeScreen = ({ navigation }) => {
   
   const featuredGames = [
-    { id: 1, title: 'Counter-Strike 2', price: 'Grátis', discount: '', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg' },
-    { id: 2, title: 'Dota 2', price: 'Grátis', discount: '', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg' },
-    { id: 3, title: 'Apex Legends™', price: 'R$ 59,99', discount: '-50%', originalPrice: 'R$ 119,99', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg' },
-    { id: 4, title: 'Grand Theft Auto V', price: 'R$ 59,99', discount: '-50%', originalPrice: 'R$ 119,99', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg' },
+    { id: 1, title: 'Overwatch 2', price: 'Grátis', discount: '', image: 'https://www.freetogame.com/g/540/thumbnail.jpg' },
+    { id: 2, title: 'Dota 2', price: 'Grátis', discount: '', image: 'https://i.ytimg.com/vi/Me3NIidc5pE/maxresdefault.jpg' },
+    { id: 3, title: 'World Of Tanks', price: 'Grátis', discount: '', originalPrice: '', image: 'https://www.freetogame.com/g/2/thumbnail.jpg' },
+    { id: 4, title: 'Guns and Robot', price: 'Grátis', discount: '', originalPrice: '', image: 'https://www.freetogame.com/g/200/thumbnail.jpg' },
+    { id: 5, title: 'Armored Warfare', price: 'Grátis', discount: '', originalPrice: '', image: 'https://www.freetogame.com/g/7/thumbnail.jpg'},
   ];
 
   const specialOffers = [
-    { id: 5, title: 'Red Dead Redemption 2', price: 'R$ 99,99', discount: '-60%', originalPrice: 'R$ 249,99', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg' },
-    { id: 6, title: 'Cyberpunk 2077', price: 'R$ 89,99', discount: '-50%', originalPrice: 'R$ 179,99', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg' },
+    { id: 5, title: 'Red Dead Redemption 2', price: 'R$ 99,99', discount: '-60%', originalPrice: 'R$ 249,99', image: 'https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg' },
+    { id: 6, title: 'Cyberpunk 2077', price: 'R$ 89,99', discount: '-50%', originalPrice: 'R$ 179,99', image: 'https://upload.wikimedia.org/wikipedia/en/9/9f/Cyberpunk_2077_box_art.jpg' },
   ];
 
   return (
@@ -22,7 +23,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.searchText}>Pesquisar</Text>
         </View>
 
-        <Text style={styles.sectionTitle}>Destaques</Text>
+        <Text style={styles.sectionTitle}>Gratuito Para Jogar</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
           {featuredGames.map(game => (
             <TouchableOpacity key={game.id} style={styles.gameCard}>
