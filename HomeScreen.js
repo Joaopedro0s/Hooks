@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
+  
   const featuredGames = [
     { id: 1, title: 'Counter-Strike 2', price: 'Grátis', discount: '', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg' },
     { id: 2, title: 'Dota 2', price: 'Grátis', discount: '', image: 'https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg' },
